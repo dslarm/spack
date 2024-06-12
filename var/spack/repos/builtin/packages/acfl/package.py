@@ -404,18 +404,7 @@ class Acfl(Package, CompilerPackage):
         env.prepend_path("LIBRARY_PATH", join_path(arm_dir, "lib"))
         env.prepend_path("MANPATH", join_path(arm_dir, "share", "man"))
 
-        env.set("GCC_DIR", gcc_dir)
-        env.set("GCC_INCLUDES", join_path(gcc_dir, "include"))
-        env.append_path("GCC_LIBRARIES", join_path(gcc_dir, "lib"))
-        env.append_path("GCC_LIBRARIES", join_path(gcc_dir, "lib64"))
-        env.set("COMPILER_PATH", gcc_dir)
         env.prepend_path("PATH", join_path(gcc_dir, "binutils_bin"))
-        env.prepend_path("CPATH", join_path(gcc_dir, "include"))
-        env.prepend_path("LD_LIBRARY_PATH", join_path(gcc_dir, "lib"))
-        env.prepend_path("LD_LIBRARY_PATH", join_path(gcc_dir, "lib64"))
-        env.prepend_path("LIBRARY_PATH", join_path(gcc_dir, "lib"))
-        env.prepend_path("LIBRARY_PATH", join_path(gcc_dir, "lib64"))
-        env.prepend_path("MANPATH", join_path(gcc_dir, "share", "man"))
 
     @run_after("install")
     def check_install(self):
@@ -431,7 +420,6 @@ class Acfl(Package, CompilerPackage):
             "CC=" + self.cc,
             "F90=" + self.fortran,
             "CPATH=" + join_path(arm_dir, "include"),
-            "COMPILER_PATH=" + gcc_dir,
             "ARMPL_DIR=" + armpl_dir,
         )
         # clean up
