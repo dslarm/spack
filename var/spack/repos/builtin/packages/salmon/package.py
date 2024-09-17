@@ -67,6 +67,7 @@ class Salmon(CMakePackage):
     depends_on("htslib", when="@1.10.2")
 
     patch("fix_hts.patch", when="@1.10.2")
+    patch("wfe.patch")
 
     conflicts("%gcc@:5.1", when="@0.14.1:")
 
