@@ -1,19 +1,57 @@
-*** a/scripts/fetchPufferfish.sh	Tue Sep 17 14:15:07 2024
---- b/scripts/fetchPufferfish.sh	Mon Jun 26 20:51:20 2023
-*************** fi
-*** 57,63 ****
-  rm -fr ${EXTERNAL_DIR}/pufferfish
-  unzip ${EXTERNAL_DIR}/pufferfish.zip -d ${EXTERNAL_DIR}
-  mv ${EXTERNAL_DIR}/pufferfish-${SVER} ${EXTERNAL_DIR}/pufferfish
-! 
-  mkdir -p ${INSTALL_DIR}/include/pufferfish
-  
-  cp ${EXTERNAL_DIR}/pufferfish/include/ProgOpts.hpp ${INSTALL_DIR}/include/pufferfish
---- 57,63 ----
-  rm -fr ${EXTERNAL_DIR}/pufferfish
-  unzip ${EXTERNAL_DIR}/pufferfish.zip -d ${EXTERNAL_DIR}
-  mv ${EXTERNAL_DIR}/pufferfish-${SVER} ${EXTERNAL_DIR}/pufferfish
-! sed -i 's/#elif defined(__aarch64__)/#elif 0/g' ${EXTERNAL_DIR}/pufferfish/include/FastxParserThreadUtils.hpp
-  mkdir -p ${INSTALL_DIR}/include/pufferfish
-  
-  cp ${EXTERNAL_DIR}/pufferfish/include/ProgOpts.hpp ${INSTALL_DIR}/include/pufferfish
+*** /dev/null	Wed Sep 18 11:10:34 2024
+--- a/puffer_relax.patch	Wed Sep 18 11:10:06 2024
+***************
+*** 0 ****
+--- 1,39 ----
++ *** external/pufferfish/include/FastxParserThreadUtils.hpp	Fri Mar 15 14:14:23 2024
++ --- external/pufferfish/include/FastxParserThreadUtils.hpp	Wed Sep 18 11:06:16 2024
++ *************** ALWAYS_INLINE static void cpuRelax() {
++ *** 27,53 ****
++   static const size_t MAX_BACKOFF_ITERS = 1024;
++   
++   ALWAYS_INLINE static void cpuRelax() {
++ ! #if defined(__SSE2__)  // AMD and Intel
++ !   #if defined(HAVE_SIMDE)
++ !     simde_mm_pause();
++ !   #else
++ !     _mm_pause();
++ !   #endif
++ ! #elif defined(__i386__) || defined(__x86_64__)
++ !   asm volatile("pause");
++ ! #elif defined(__aarch64__)
++ !   asm volatile("wfe");
++ ! #elif defined(__armel__) || defined(__ARMEL__)
++ !   asm volatile ("nop" ::: "memory");
++ ! #elif defined(__arm__) || defined(__aarch64__)
++ !   __asm__ __volatile__ ("yield" ::: "memory");
++ ! #elif defined(__ia64__)  // IA64
++ !   __asm__ __volatile__ ("hint @pause");
++ ! #elif defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)
++ !    __asm__ __volatile__ ("or 27,27,27" ::: "memory");
++ ! #else  // everything else.
++ !    asm volatile ("nop" ::: "memory");
++ ! #endif
++   }
++   
++   ALWAYS_INLINE void yieldSleep() {
++ --- 27,33 ----
++   static const size_t MAX_BACKOFF_ITERS = 1024;
++   
++   ALWAYS_INLINE static void cpuRelax() {
++ !   std::this_thread::sleep_for(std::chrono::nanoseconds(1));
++   }
++   
++   ALWAYS_INLINE void yieldSleep() {
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0ff9550f..c0f5f0af 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -888,6 +888,8 @@ define_property(TARGET PROPERTY COMPACT_VECTOR_DIR INHERITED
+ set(BUILD_PUFF_FOR_SALMON TRUE)
+ add_subdirectory(external/pufferfish)
+ 
++exec_program("patch -p0 ${CMAKE_CURRENT_SOURCE_DIR}/external/pufferfish/include/FastxParserThreadUtils.hpp < ${CMAKE_CURRENT_SOURCE_DIR}/puffer_relax.patch")
++
+ # make sure we know the path to compact_vector
+ get_property(COMPACT_VECTOR_INCLUDE_PATH TARGET graphdump PROPERTY COMPACT_VECTOR_DIR)
+ message("fetched path for compact_vector as [${COMPACT_VECTOR_INCLUDE_PATH}]")
