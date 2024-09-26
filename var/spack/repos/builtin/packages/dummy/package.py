@@ -41,5 +41,5 @@ class Dummy(MakefilePackage):
             make()
             mkdir(prefix.bin)
             installer = Executable("/bin/cp")
-            installer("hello_cxx", prefix.bin)
+            installer("hello", prefix.bin)
 
