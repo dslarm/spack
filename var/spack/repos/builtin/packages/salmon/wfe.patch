@@ -2,46 +2,23 @@
 --- a/puffer_relax.patch	Wed Sep 18 11:10:06 2024
 ***************
 *** 0 ****
---- 1,39 ----
+--- 1,2 ----
 + *** external/pufferfish/include/FastxParserThreadUtils.hpp	Fri Mar 15 14:14:23 2024
 + --- external/pufferfish/include/FastxParserThreadUtils.hpp	Wed Sep 18 11:06:16 2024
-+ *************** ALWAYS_INLINE static void cpuRelax() {
-+ *** 27,53 ****
-+   static const size_t MAX_BACKOFF_ITERS = 1024;
-+   
-+   ALWAYS_INLINE static void cpuRelax() {
-+ ! #if defined(__SSE2__)  // AMD and Intel
-+ !   #if defined(HAVE_SIMDE)
-+ !     simde_mm_pause();
-+ !   #else
-+ !     _mm_pause();
-+ !   #endif
-+ ! #elif defined(__i386__) || defined(__x86_64__)
-+ !   asm volatile("pause");
-+ ! #elif defined(__aarch64__)
-+ !   asm volatile("wfe");
-+ ! #elif defined(__armel__) || defined(__ARMEL__)
-+ !   asm volatile ("nop" ::: "memory");
-+ ! #elif defined(__arm__) || defined(__aarch64__)
-+ !   __asm__ __volatile__ ("yield" ::: "memory");
-+ ! #elif defined(__ia64__)  // IA64
-+ !   __asm__ __volatile__ ("hint @pause");
-+ ! #elif defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)
-+ !    __asm__ __volatile__ ("or 27,27,27" ::: "memory");
-+ ! #else  // everything else.
-+ !    asm volatile ("nop" ::: "memory");
-+ ! #endif
-+   }
-+   
-+   ALWAYS_INLINE void yieldSleep() {
-+ --- 27,33 ----
-+   static const size_t MAX_BACKOFF_ITERS = 1024;
-+   
-+   ALWAYS_INLINE static void cpuRelax() {
-+ !  return;
-+   }
-+   
-+   ALWAYS_INLINE void yieldSleep() {
+@@ -35,12 +35,8 @@ ALWAYS_INLINE static void cpuRelax() {
+   #endif
+ #elif defined(__i386__) || defined(__x86_64__)
+   asm volatile("pause");
+-#elif defined(__aarch64__)
+-  asm volatile("wfe");
+-#elif defined(__armel__) || defined(__ARMEL__)
++#elif defined(__armel__) || defined(__ARMEL__) || defined(__arm__) || defined(__aarch64__)
+   asm volatile ("nop" ::: "memory");
+-#elif defined(__arm__) || defined(__aarch64__)
+-  __asm__ __volatile__ ("yield" ::: "memory");
+ #elif defined(__ia64__)  // IA64
+   __asm__ __volatile__ ("hint @pause");
+ #elif defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 0ff9550f..c0f5f0af 100644
 --- a/CMakeLists.txt
