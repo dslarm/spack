@@ -13,7 +13,7 @@
 -  asm volatile("wfe");
 -#elif defined(__armel__) || defined(__ARMEL__)
 +#elif defined(__armel__) || defined(__ARMEL__) || defined(__arm__) || defined(__aarch64__)
-   asm volatile ("nop" ::: "memory");
+   return;
 -#elif defined(__arm__) || defined(__aarch64__)
 -  __asm__ __volatile__ ("yield" ::: "memory");
  #elif defined(__ia64__)  // IA64
