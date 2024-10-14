@@ -116,7 +116,13 @@ class Salmon(CMakePackage):
         when="@:1.10.1%gcc@13:",
         level=1,
     )
-
+    patch(
+        "https://github.com/dslarm/salmon/commit/40b12d49df53a8540530c07716dd35b711a6201f.patch?full_index=1",
+        sha256="90af1af2d2b416618e92cdd1131afb4bc92816a7f1feb165accb78008ede111f",
+        when="target=aarch64:",
+        level=1
+        )
+    
     def patch(self):
         # remove static linking to libstdc++
         filter_file("-static-libstdc++", "", "CMakeLists.txt", string=True)
