@@ -127,6 +127,12 @@ class Salmon(CMakePackage):
         sha256="85f3a5baf3002b6b625673297f90f9b999ee21f6fe9644cb54e83d1c820b01c6",
         level=1
         )
+    patch(
+        "https://github.com/COMBINE-lab/salmon/commit/85df2f45f41da44ecb7eec320ec6974e4e28c4ee.patch?full_index=1",
+        sha256="10bd47ef4b4c56e9676613898f168662c48b5af83670544915a4f99d39f207db",
+        level=1
+        )
+
     def patch(self):
         # remove static linking to libstdc++
         filter_file("-static-libstdc++", "", "CMakeLists.txt", string=True)
