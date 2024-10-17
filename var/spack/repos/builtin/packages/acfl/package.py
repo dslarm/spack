@@ -37,6 +37,19 @@ _os_map = {
 }
 
 _versions = {
+    "24.10": {
+        "RHEL-9": (
+            "52767ec236098aec410b1d9899c4ba2c3dc2bcc3c2b500dbf2f4b7b3cfacf16d",
+            "https://developer.arm.com/-/cdn-downloads/permalink/Arm-Compiler-for-Linux/Version_24.10/arm-compiler-for-linux_24.10_RHEL-9_aarch64.tar"
+        ),
+        "Ubuntu-22.04": (
+            "10c0fad1ff3628f505ada90359c68b046676a4c6cab1131d76ae0429d3694415",
+            "https://developer.arm.com/-/cdn-downloads/permalink/Arm-Compiler-for-Linux/Version_24.10/arm-compiler-for-linux_24.10_Ubuntu-22.04_aarch64.tar"
+        )
+    },
+
+
+
     "24.04": {
         "RHEL-7": (
             "064c3ecfd71cba3d8bf639448e899388f58eb7faef4b38f3c1aace625ace8b1e",
