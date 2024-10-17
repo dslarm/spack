@@ -54,6 +54,11 @@ _os_pkg_map = {
 }
 
 _versions = {
+    "24.10": {
+        "deb": ("2be772d41c0e8646e24c4f57e188e96f2dd8934966ae560c74fa905cbde5e1bc"),
+        "macOS": ("228bf3a2c25dbd45c2f89c78f455ee3c7dfb25e121c20d2765138b5174e688dc"),
+        "rpm": ("055d4b3c63d990942d453a8720d029be7e604646218ffc3262321683f51f23aa")
+    },
     "24.04": {
         "deb": ("a323074cd08af82f4d79988cc66088b18e47dea4b93323b1b8a0f994f769f2f0"),
         "macOS": ("228bf3a2c25dbd45c2f89c78f455ee3c7dfb25e121c20d2765138b5174e688dc"),
