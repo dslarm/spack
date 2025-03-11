@@ -423,6 +423,9 @@ class Openfoam(Package):
         when="@2012_220610",
         sha256="bad4b0e80fd26ea702bce9ccfb925edbbaa3308f70392fe6da2c7671b1d39bea",
     )
+    patch("acfl2410.patch", when="%arm@24.10:")
+
+    patch("1612-spack-patches.patch", when="@1612")
 
     # Some user config settings
     # default: 'compile-option': '-spack',
