@@ -236,6 +236,10 @@ class Hdf5(CMakePackage):
     # three src files and leaves the hdf5 build system alone.
     patch("pre-c99-comments.patch", when="@1.8.10")
 
+
+    # patch needed due to incorrect kind=16 behaviour with ACfL (%arm) and hdf5-1.14
+    patch("acfl.kind16.patch", when="@1.14.5:%arm@:25")
+    
     # There are build errors with GCC 8, see
     # https://forum.hdfgroup.org/t/1-10-2-h5detect-compile-error-gcc-8-1-0-on-centos-7-2-solved/4441
     patch(

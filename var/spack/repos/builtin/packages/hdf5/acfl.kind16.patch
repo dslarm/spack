@@ -1,0 +1,10 @@
+*** config/cmake/HDFUseFortran.cmake	Wed Mar 12 14:20:33 2025
+--- config/cmake/HDFUseFortran.cmake	Wed Mar 12 14:21:44 2025
+*************** endif ()
+*** 87,89 ****
+--- 87,91 ----
+          set (CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG" CACHE STRING "flags" FORCE)
+      endif ()
+  endif ()
++ 
++ set (${HDF_PREFIX}_HAVE_ISO_FORTRAN_ENV 0)
