@@ -425,8 +425,6 @@ class Openfoam(Package):
     )
     patch("acfl2410.patch", when="%arm@24.10:")
 
-    patch("1612-spack-patches.patch", when="@1612")
-
     # Some user config settings
     # default: 'compile-option': '-spack',
     # default: 'mplib': 'USERMPI',  # User-defined mpi for spack
